@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>刘蕾 · AI 产品经理 — 个人产品说明书</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23D9480F'/><text x='16' y='23' font-family='Georgia,serif' font-size='19' fill='%23FFFFFF' text-anchor='middle'>L</text></svg>">
+<style>
+/* SECTION: design tokens */
+:root {
+  --bg: #FFF9F3;
+  --bg-soft: #FBEFE3;
+  --bg-card: #FFFFFF;
+  --ink: #2B1D12;
+  --ink-2: #5C4636;
+  --ink-3: #98806E;
+  --line: #F2E3D3;
+  --line-strong: #E2CBB4;
+  --accent: #D9480F;
+  --accent-soft: #FCE7D8;
+  --accent-ink: #B53A08;
+  --shadow-s: 0 1px 2px rgba(31,30,27,.04), 0 4px 14px rgba(31,30,27,.045);
+  --shadow-m: 0 2px 6px rgba(31,30,27,.05), 0 18px 44px rgba(31,30,27,.08);
+  --serif: "Songti SC", Georgia, "Times New Roman", "Noto Serif SC", serif;
+  --sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --mono: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  --r-s: 8px; --r-m: 12px; --r-l: 18px;
+  --maxw: 1120px;
+}
+[data-theme="dark"] {
+  --bg: #1B1512;
+  --bg-soft: #241C17;
+  --bg-card: #2B221B;
+  --ink: #F7EFE8;
+  --ink-2: #D3C2B4;
+  --ink-3: #A08D7C;
+  --line: #382D24;
+  --line-strong: #4A3B2E;
+  --accent: #FF8A3D;
+  --accent-soft: #3A2A1C;
+  --accent-ink: #FFA866;
+  --shadow-s: 0 1px 2px rgba(0,0,0,.3);
+  --shadow-m: 0 2px 8px rgba(0,0,0,.32), 0 20px 48px rgba(0,0,0,.34);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 88px; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--sans); font-size: 16px; line-height: 1.72;
+  letter-spacing: .01em; transition: background .4s ease, color .4s ease;
+  -webkit-font-smoothing: antialiased;
+}
+h1,h2,h3,h4 { font-family: var(--serif); font-weight: 500; letter-spacing: -.015em; line-height: 1.22; margin: 0; }
+p { margin: 0; }
+a { color: inherit; text-decoration: none; }
+ul { margin: 0; padding: 0; list-style: none; }
+button { font-family: inherit; cursor: pointer; }
+.wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 28px; }
+.hair { height: 1px; background: var(--line); border: 0; margin: 0; }
+
+/* SECTION: reveal animation */
+.rv { opacity: 0; transform: translateY(18px); transition: opacity .7s cubic-bezier(.22,.61,.36,1), transform .7s cubic-bezier(.22,.61,.36,1); }
+.rv.on { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .rv { opacity: 1; transform: none; transition: none; } html { scroll-behavior: auto; } }
+
+/* SECTION: topbar */
+.topbar {
+  position: fixed; inset: 0 0 auto 0; z-index: 60;
+  background: var(--bg);
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: saturate(150%) blur(18px);
+  -webkit-backdrop-filter: saturate(150%) blur(18px);
+  border-bottom: 1px solid transparent; transition: border-color .3s, background .3s;
+}
+.topbar.stuck { border-bottom-color: var(--line); }
+.topbar-in { display: flex; align-items: center; gap: 20px; height: 64px; }
+.brand { display: flex; align-items: center; gap: 11px; margin-right: auto; flex: none; }
+.monogram {
+  width: 30px; height: 30px; border-radius: 50%; flex: none;
+  background: var(--accent); color: #FFFFFF;
+  font-family: var(--serif); font-size: 16px; line-height: 30px; text-align: center;
+}
+.brand-txt { display: flex; flex-direction: column; line-height: 1.24; }
+.brand-name { font-family: var(--serif); font-size: 16px; }
+.brand-role { font-size: 11.5px; color: var(--ink-3); letter-spacing: .06em; }
+.nav { display: flex; align-items: center; gap: 2px; }
+.nav a {
+  position: relative; padding: 8px 13px; border-radius: 999px;
+  font-size: 14px; color: var(--ink-2); transition: color .25s, background .25s;
+}
+.nav a:hover { color: var(--ink); background: var(--bg-soft); }
+.nav a.active { color: var(--accent-ink); background: var(--accent-soft); }
+.tb-tools { display: flex; align-items: center; gap: 8px; flex: none; }
+.icon-btn {
+  width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line);
+  background: var(--bg-card); color: var(--ink-2); display: grid; place-items: center;
+  transition: border-color .25s, color .25s, transform .25s;
+}
+.icon-btn:hover { border-color: var(--line-strong); color: var(--ink); transform: translateY(-1px); }
+.icon-btn svg { width: 16px; height: 16px; }
+[data-theme="light"] .moon { display: none; }
+[data-theme="dark"] .sun { display: none; }
+.nav-toggle { display: none; }
+
+/* SECTION: buttons */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 22px;
+  border-radius: 999px; border: 1px solid transparent; font-size: 15px;
+  transition: transform .22s cubic-bezier(.22,.61,.36,1), background .22s, border-color .22s, box-shadow .22s;
+}
+.btn-primary { background: var(--accent); color: #FFFFFF; box-shadow: var(--shadow-s); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: var(--shadow-m); background: var(--accent-ink); }
+.btn-ghost { border-color: var(--line-strong); color: var(--ink); background: transparent; }
+.btn-ghost:hover { transform: translateY(-2px); border-color: var(--ink-3); background: var(--bg-card); }
+.btn-sm { height: 38px; padding: 0 16px; font-size: 14px; }
+.btn svg { width: 15px; height: 15px; }
+
+/* SECTION: hero */
+.hero { padding: 152px 0 78px; position: relative; overflow: hidden; }
+.hero::after {
+  content: ""; position: absolute; right: -180px; top: -140px; width: 620px; height: 620px;
+  background: radial-gradient(circle at center, var(--accent-soft), transparent 66%);
+  opacity: .85; pointer-events: none;
+}
+.hero-in { position: relative; z-index: 1; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 9px; padding: 5px 14px 5px 10px;
+  border: 1px solid var(--line-strong); border-radius: 999px;
+  font-size: 12.5px; letter-spacing: .1em; color: var(--ink-2); background: var(--bg-card);
+}
+.eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+.hero h1 { font-size: clamp(42px, 6.6vw, 78px); margin: 26px 0 0; }
+.hero h1 .nm { display: inline-block; }
+.hero h1 .rt { display: block; color: var(--ink-3); font-size: clamp(21px, 2.9vw, 34px); font-style: italic; margin-top: 10px; letter-spacing: 0; }
+.hero-slogan { font-size: clamp(17px, 2vw, 21px); line-height: 1.62; max-width: 34em; margin-top: 28px; color: var(--ink-2); }
+.hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+.hero-meta { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 26px; font-size: 13.5px; color: var(--ink-3); }
+.hero-meta span { display: inline-flex; align-items: center; gap: 7px; }
+.hero-meta svg { width: 14px; height: 14px; opacity: .8; }
+
+/* SECTION: hero stats strip */
+.stats { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--bg-soft); }
+.stats-in { display: grid; grid-template-columns: repeat(4, 1fr); }
+.stat { padding: 30px 26px 28px; border-left: 1px solid var(--line); }
+.stat:first-child { border-left: 0; }
+.stat-v { font-family: var(--serif); font-size: clamp(27px, 3.4vw, 40px); line-height: 1.05; color: var(--accent-ink); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.stat-metric { font-family: var(--sans); font-size: 15px; font-weight: 600; color: var(--ink); letter-spacing: .01em; margin-left: 10px; }
+.stat-l { font-size: 14px; margin-top: 9px; color: var(--ink); }
+.stat-s { font-size: 12px; margin-top: 3px; color: var(--ink-3); }
+.stat-v.cyc, .stat-s.cyc { transition: opacity .24s ease, transform .24s ease; }
+.stat-v.cyc.fade, .stat-s.cyc.fade { opacity: 0; transform: translateY(-5px); }
+.stat-s.cyc { min-height: 2.6em; }
+
+/* SECTION: section shell */
+.sec { padding: 96px 0; }
+.sec.alt { background: var(--bg-soft); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.sec-head { display: grid; gap: 14px; max-width: 44em; margin-bottom: 52px; }
+.sec-kicker { font-size: 12.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent-ink); font-family: var(--mono); }
+.sec-head h2 { font-size: clamp(30px, 4vw, 44px); }
+.sec-head p { color: var(--ink-2); font-size: 16.5px; }
+
+/* SECTION: capabilities */
+.caps { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--r-l); overflow: hidden; }
+.cap { background: var(--bg-card); padding: 34px 32px 30px; transition: background .3s, transform .3s; position: relative; }
+.cap:hover { background: var(--bg); }
+.cap-idx { font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); letter-spacing: .12em; }
+.cap h3 { font-size: 22px; margin: 12px 0 3px; }
+.cap-en { font-size: 12px; color: var(--accent-ink); font-family: var(--mono); letter-spacing: .05em; }
+.cap p { color: var(--ink-2); font-size: 15px; margin-top: 14px; }
+.cap-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
+.tg { font-size: 12px; padding: 3px 10px; border-radius: 999px; background: var(--bg-soft); border: 1px solid var(--line); color: var(--ink-2); }
+.cap:hover .tg { background: var(--accent-soft); border-color: transparent; color: var(--accent-ink); }
+
+/* SECTION: modules (case switcher) */
+.tabs {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  position: sticky; top: 64px; z-index: 40;
+  background: var(--bg-soft); padding: 12px 0 10px; margin: -12px 0 12px;
+}
+.tab {
+  padding: 10px 20px; border-radius: 14px; border: 1px solid var(--line-strong);
+  background: transparent; color: var(--ink-2); font-size: 15px; text-align: left;
+  display: flex; flex-direction: column; gap: 2px; line-height: 1.35;
+  transition: all .25s cubic-bezier(.22,.61,.36,1);
+}
+.tab .tab-sub { font-family: var(--mono); font-size: 11.5px; letter-spacing: .03em; color: var(--ink-3); }
+.tab:hover { color: var(--ink); border-color: var(--ink-3); }
+.tab[aria-selected="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.tab[aria-selected="true"] .tab-sub { color: var(--bg); opacity: .68; }
+/* SECTION: modules carousel */
+.car { position: relative; }
+.car-row { display: block; position: relative; }
+.car-viewport {
+  width: 100%;
+  display: flex; gap: 20px; overflow-x: auto; overflow-y: hidden;
+  scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none;
+  padding: 4px 2px 10px; outline: none;
+}
+.car-viewport::-webkit-scrollbar { display: none; }
+.car-viewport:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: var(--r-l); }
+.mod {
+  flex: 0 0 100%; min-width: 0; scroll-snap-align: start; scroll-snap-stop: always;
+  background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--r-l);
+  box-shadow: var(--shadow-s);
+  display: flex; flex-direction: column;
+  height: clamp(500px, calc(100vh - 250px), 700px);
+}
+.mod-top { padding: 22px 28px 18px; display: grid; grid-template-columns: auto 1fr; gap: 18px; border-bottom: 1px solid var(--line); flex: none; }
+.mod-no { font-family: var(--serif); font-size: 15px; color: var(--accent); padding-top: 5px; }
+.mod-t { display: block; font-size: 22px; }
+.mod-role { display: block; font-size: 13.5px; color: var(--ink-3); margin-top: 5px; }
+.mod-body { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); }
+.mod-col { min-height: 0; overflow-y: auto; padding: 22px 26px 24px; scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent; }
+.mod-col::-webkit-scrollbar { width: 5px; }
+.mod-col::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 999px; }
+.mod-col-a { border-right: 1px solid var(--line); }
+.mod-inner { padding: 0; }
+.blk + .blk { margin-top: 22px; }
+.mod .blk p, .mod .sol-i span { font-size: 14px; line-height: 1.66; }
+.mod .sol-i b { font-size: 14.5px; }
+.sol { gap: 12px; }
+.car-ctrl { display: flex; align-items: center; gap: 18px; margin-top: 14px; }
+.car-count { font-family: var(--mono); font-size: 12.5px; color: var(--ink-3); letter-spacing: .08em; }
+.car-dots { display: flex; gap: 8px; margin: 0 auto; }
+.car-dot { width: 9px; height: 9px; padding: 0; border: 0; border-radius: 50%; background: var(--line-strong); cursor: pointer; transition: background .3s, transform .3s; }
+.car-dot.on { background: var(--accent); transform: scale(1.3); }
+.car-arrow {
+  position: absolute; top: 50%; margin-top: -23px; z-index: 6;
+  width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--line-strong);
+  background: var(--bg-card); color: var(--ink-2); display: grid; place-items: center;
+  box-shadow: var(--shadow-m); transition: all .25s;
+}
+.car-arrow#carPrev { left: 12px; }
+.car-arrow#carNext { right: 12px; }
+.car-arrow:hover:not(:disabled) { border-color: var(--accent); color: var(--accent-ink); background: var(--accent-soft); transform: scale(1.06); }
+.car-arrow:disabled { opacity: .3; cursor: default; box-shadow: var(--shadow-s); }
+.car-arrow svg { width: 16px; height: 16px; }
+/* 按钮避让：左右两栏外侧预留按钮通道 */
+.mod-col-a { padding-left: 76px; }
+.mod-col-b { padding-right: 76px; }
+.blk + .blk { margin-top: 26px; }
+.blk-h { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent-ink); font-family: var(--mono); margin-bottom: 9px; }
+.blk p { color: var(--ink-2); font-size: 15px; }
+.sol { display: grid; gap: 14px; }
+.sol-i { display: grid; grid-template-columns: auto 1fr; gap: 13px; align-items: start; }
+.sol-i .num { font-family: var(--mono); font-size: 11px; color: var(--ink-3); border: 1px solid var(--line); border-radius: 6px; padding: 2px 6px; margin-top: 4px; }
+.sol-i b { font-weight: 600; font-size: 15px; display: block; margin-bottom: 3px; }
+.sol-i span { color: var(--ink-2); font-size: 14.5px; }
+.res { display: flex; flex-wrap: wrap; gap: 8px; }
+.res-i { border: 1px solid var(--line-strong); border-radius: var(--r-m); padding: 11px 15px; background: var(--bg-soft); min-width: 148px; }
+.res-i b { display: block; font-family: var(--serif); font-size: 19px; color: var(--accent-ink); font-weight: 500; letter-spacing: -.01em; }
+.res-i span { font-size: 12.5px; color: var(--ink-3); }
+
+/* SECTION: performance */
+.perf { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--r-l); overflow: hidden; }
+.pf { background: var(--bg-card); padding: 26px 24px 22px; display: flex; flex-direction: column; gap: 4px; transition: background .3s; }
+.pf:hover { background: var(--bg); }
+.pf-v { font-family: var(--serif); font-size: clamp(30px, 3vw, 40px); line-height: 1.08; color: var(--accent-ink); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.pf-l { font-size: 14.5px; color: var(--ink); margin-top: 8px; }
+.pf-note { font-size: 12px; color: var(--ink-3); }
+.pf:last-child:nth-child(4n-1) { grid-column: span 2; }
+
+/* SECTION: timeline */
+.tl { display: grid; gap: 0; border-left: 1px solid var(--line-strong); margin-left: 6px; }
+.tl-i { position: relative; padding: 0 0 40px 32px; }
+.tl-i:last-child { padding-bottom: 0; }
+.tl-i::before { content: ""; position: absolute; left: -5.5px; top: 8px; width: 10px; height: 10px; border-radius: 50%; background: var(--bg); border: 2px solid var(--accent); }
+.tl-y { font-family: var(--mono); font-size: 12.5px; color: var(--accent-ink); letter-spacing: .04em; }
+.tl-o { font-family: var(--serif); font-size: 22px; margin-top: 7px; }
+.tl-r { font-size: 14px; color: var(--ink-3); margin-top: 2px; }
+.tl-d { font-size: 14.5px; color: var(--ink-2); margin-top: 10px; max-width: 42em; }
+.tl-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.cert { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 44px; padding-top: 26px; border-top: 1px solid var(--line); }
+.cert-i { display: flex; align-items: center; gap: 10px; border: 1px solid var(--line); background: var(--bg-card); border-radius: var(--r-m); padding: 12px 16px; }
+.cert-i svg { width: 16px; height: 16px; color: var(--accent); flex: none; }
+.cert-i b { font-weight: 600; font-size: 14.5px; }
+.cert-i span { font-size: 12.5px; color: var(--ink-3); font-family: var(--mono); }
+
+/* SECTION: stack */
+.stk { display: grid; grid-template-columns: repeat(2, 1fr); gap: 34px 44px; }
+.stk-cat h3 { font-size: 13px; font-family: var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); font-weight: 400; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+.stk-items { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.stk-t { font-size: 14px; padding: 7px 14px; border-radius: var(--r-s); border: 1px solid var(--line); background: var(--bg-card); color: var(--ink-2); transition: all .25s; }
+.stk-t:hover { border-color: var(--accent); color: var(--accent-ink); background: var(--accent-soft); transform: translateY(-2px); }
+
+/* SECTION: contact */
+.cta-card { border: 1px solid var(--line-strong); border-radius: 24px; background: var(--bg-card); box-shadow: var(--shadow-m); padding: 52px 48px; display: grid; grid-template-columns: 1.15fr 1fr; gap: 46px; align-items: center; }
+.cta-card h2 { font-size: clamp(28px, 3.6vw, 40px); }
+.cta-card > div > p { color: var(--ink-2); margin-top: 14px; max-width: 26em; }
+.copy-list { display: grid; gap: 12px; }
+.copy {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center;
+  border: 1px solid var(--line); border-radius: var(--r-m); background: var(--bg); padding: 15px 18px;
+  text-align: left; color: inherit; transition: border-color .25s, background .25s, transform .25s;
+}
+.copy:hover { border-color: var(--accent); transform: translateX(3px); background: var(--bg-card); }
+.copy svg { width: 17px; height: 17px; color: var(--ink-3); }
+.copy-k { display: block; font-size: 11.5px; color: var(--ink-3); letter-spacing: .08em; text-transform: uppercase; font-family: var(--mono); }
+.copy-v { display: block; font-size: 16px; word-break: break-all; }
+.copy-hint { font-size: 11.5px; color: var(--ink-3); font-family: var(--mono); white-space: nowrap; }
+.copy.done .copy-hint { color: var(--accent-ink); }
+.copy.done svg { color: var(--accent); }
+
+/* SECTION: footer */
+footer { padding: 40px 0 54px; border-top: 1px solid var(--line); }
+.ft { display: flex; flex-wrap: wrap; gap: 14px 26px; align-items: center; font-size: 13px; color: var(--ink-3); }
+.ft .spacer { margin-left: auto; }
+.ft a:hover { color: var(--accent-ink); }
+
+/* SECTION: toast */
+.toast {
+  position: fixed; left: 50%; bottom: 34px; z-index: 90;
+  transform: translate(-50%, 22px); opacity: 0; pointer-events: none;
+  background: var(--ink); color: var(--bg); padding: 12px 22px; border-radius: 999px;
+  font-size: 14px; box-shadow: var(--shadow-m); transition: opacity .3s, transform .3s cubic-bezier(.22,.61,.36,1);
+  display: flex; align-items: center; gap: 9px;
+}
+.toast.on { opacity: 1; transform: translate(-50%, 0); }
+.toast svg { width: 15px; height: 15px; color: var(--accent); }
+
+/* SECTION: mobile */
+@media (max-width: 1000px) {
+  .stk { grid-template-columns: 1fr; }
+  .cta-card { grid-template-columns: 1fr; padding: 40px 34px; gap: 34px; }
+}
+@media (max-width: 860px) {
+  .wrap { padding: 0 20px; }
+  .nav-toggle { display: grid; }
+  .nav {
+    position: fixed; inset: 64px 0 auto 0; flex-direction: column; align-items: stretch; gap: 2px;
+    background: var(--bg); border-bottom: 1px solid var(--line); padding: 14px 20px 22px;
+    box-shadow: var(--shadow-m); display: none;
+  }
+  .nav.open { display: flex; }
+  .nav a { padding: 13px 14px; border-radius: var(--r-s); font-size: 15.5px; }
+  .hero { padding: 116px 0 58px; }
+  .stats-in { grid-template-columns: repeat(2, 1fr); }
+  .stat { border-left: 0; border-top: 1px solid var(--line); padding: 22px 4px; }
+  .stat:nth-child(odd) { border-right: 1px solid var(--line); padding-right: 18px; }
+  .stat:nth-child(even) { padding-left: 18px; }
+  .stat:nth-child(-n+2) { border-top: 0; }
+  .sec { padding: 68px 0; }
+  .sec-head { margin-bottom: 34px; }
+  .caps { grid-template-columns: 1fr; }
+  .perf { grid-template-columns: repeat(2, 1fr); }
+  .pf { padding: 20px 18px; }
+  .pf:last-child:nth-child(4n-1) { grid-column: span 2; }
+  .mod { height: auto; }
+  .mod-top { grid-template-columns: 1fr; padding: 22px; gap: 6px; }
+  .mod-no { display: none; }
+  .mod-body { grid-template-columns: 1fr; }
+  .mod-col { overflow-y: visible; padding: 18px 22px; }
+  .mod-col-a { border-right: 0; border-bottom: 1px solid var(--line); }
+  .mod-t { font-size: 19px; }
+  .car-row { display: flex; align-items: center; gap: 8px; }
+  .car-arrow { position: static; margin-top: 0; width: 38px; height: 38px; }
+  .car-arrow svg { width: 14px; height: 14px; }
+  .car-viewport { flex: 1; min-width: 0; }
+  .car-ctrl { flex-wrap: wrap; }
+  .car-dots { order: 3; width: 100%; justify-content: center; margin: 4px 0 0; }
+  .tl-i { padding-left: 24px; }
+}
+@media (max-width: 420px) {
+  .hero-cta { flex-direction: column; align-items: stretch; }
+  .btn { justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- SECTION: topbar markup -->
+<header class="topbar" id="topbar">
+  <div class="wrap topbar-in">
+    <a class="brand" href="#top" aria-label="回到顶部">
+      <span class="monogram" id="mono">L</span>
+      <span class="brand-txt">
+        <span class="brand-name" id="brandName">刘蕾</span>
+      </span>
+    </a>
+    <nav class="nav" id="nav" aria-label="章节导航"></nav>
+    <div class="tb-tools">
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="切换深浅色主题" title="切换主题">
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M4.2 12H2M22 12h-2.2M5.6 5.6 7.2 7.2M16.8 16.8l1.6 1.6M18.4 5.6l-1.6 1.6M7.2 16.8l-1.6 1.6"/></svg>
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M20.5 14.4A8.6 8.6 0 1 1 9.6 3.5a6.9 6.9 0 0 0 10.9 10.9Z"/></svg>
+      </button>
+      <button class="icon-btn nav-toggle" id="navToggle" type="button" aria-label="打开菜单" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <!-- SECTION: hero markup -->
+  <section class="hero">
+    <div class="wrap hero-in">
+      <span class="eyebrow rv"><span class="dot"></span><span id="heroTag">PERSONAL PRODUCT · v2026</span></span>
+      <h1 class="rv"><span class="nm" id="heroName">刘蕾</span><span class="rt" id="heroRole">不追逐 AI 热点，专注把 AI 能力兑现成业务结果。</span></h1>
+      <p class="hero-slogan rv" id="heroSlogan"></p>
+      <div class="hero-cta rv">
+        <a class="btn btn-primary" href="#modules">
+          查看产品案例
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M12.5 5.5 19 12l-6.5 6.5"/></svg>
+        </a>
+        <a class="btn btn-ghost" href="#contact">与我联系</a>
+      </div>
+      <div class="hero-meta rv" id="heroMeta"></div>
+    </div>
+  </section>
+
+  <!-- SECTION: hero stats markup -->
+  <section class="stats">
+    <div class="wrap"><div class="stats-in" id="statsRow"></div></div>
+  </section>
+
+  <!-- SECTION: capabilities markup -->
+  <section class="sec" id="capabilities">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="sec-kicker">Core Capabilities</span>
+        <h2>核心能力优势</h2>
+        <p>以场景落地为抓手，通过 AI 技术管控、量化指标沉淀与多方协同，保障 AI 业务可落地可验证。</p>
+      </div>
+      <div class="caps rv" id="capsGrid"></div>
+    </div>
+  </section>
+
+  <!-- SECTION: modules markup -->
+  <section class="sec alt" id="modules">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="sec-kicker">Product Modules</span>
+        <h2>产品案例</h2>
+        <p>洞察真实业务痛点，完成需求定义、方案设计到落地迭代，以产品方案打通业务、技术与数据，交付可量化业务成果。</p>
+      </div>
+      <div class="tabs rv" id="grpTabs" role="tablist" aria-label="按公司筛选项目"></div>
+      <div class="car rv">
+        <div class="car-row">
+          <button class="car-arrow" id="carPrev" type="button" aria-label="上一个项目">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11.5 5.5 5 12l6.5 6.5"/></svg>
+          </button>
+          <div class="car-viewport" id="modsList" tabindex="0" role="group" aria-label="项目卡片，可左右滑动"></div>
+          <button class="car-arrow" id="carNext" type="button" aria-label="下一个项目">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M12.5 5.5 19 12l-6.5 6.5"/></svg>
+          </button>
+        </div>
+        <div class="car-ctrl">
+          <span class="car-count" id="carCount"></span>
+          <div class="car-dots" id="carDots"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: performance markup -->
+  <section class="sec" id="performance">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="sec-kicker">Benchmarks</span>
+        <h2>实测数据成果</h2>
+        <p>多维量化指标，验证产品落地价值。</p>
+      </div>
+      <div class="perf rv" id="perfList"></div>
+    </div>
+  </section>
+
+  <!-- SECTION: timeline markup -->
+  <section class="sec alt" id="timeline">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="sec-kicker">Career Path</span>
+        <h2>成长路径</h2>
+        <p>从 SaaS 商业化中台走向 AI 数据智能产品建设持续深耕。</p>
+      </div>
+      <div class="tl rv" id="tlList"></div>
+      <div class="cert rv" id="certList"></div>
+    </div>
+  </section>
+
+  <!-- SECTION: stack markup -->
+  <section class="sec" id="stack">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="sec-kicker">Tech Stack</span>
+        <h2>能力清单</h2>
+        <p>在项目实践中沉淀综合产品能力，兼顾智能化场景建设，工程协作推进以及行业业务认知。</p>
+      </div>
+      <div class="stk rv" id="stkGrid"></div>
+    </div>
+  </section>
+
+  <!-- SECTION: contact markup -->
+  <section class="sec alt" id="contact">
+    <div class="wrap">
+      <div class="cta-card rv">
+        <div>
+          <span class="sec-kicker">Get in touch</span>
+          <h2 style="margin-top:12px">如果您认可我的能力，<br>要求恰好与之匹配，<br><span style="color:var(--accent-ink)">请联系我！</span></h2>
+          <p>如果你正在把 AI 落到具体业务场景——知识库、流程自动化、数据分析——点击右侧任一信息即可复制联系。</p>
+        </div>
+        <div class="copy-list" id="copyList"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap ft">
+    <span id="ftName">刘蕾</span>
+    <span>·</span>
+    <span id="ftRole">AI 产品经理</span>
+    <span class="spacer" id="ftTheme">浅色主题</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5 9.5 17.5 19.5 6.5"/></svg>
+  <span id="toastMsg">已复制</span>
+</div>
+
+<script>
+/* SECTION: resume-data
+   简历结构化内容数据。全部文字与数字均取自用户提供的简历 PDF《AI产品经理（优化版）.pdf》。
+   不含任何虚构事实。*/
+window.RESUME = {
+  meta: {
+    name: "刘蕾",
+    initial: "L",
+    role: "AI 产品经理",
+    slogan:
+      "擅长从 0‑1 落地 AI 产品，依托 RAG 知识库、Agent 智能工作流与业务指标体系建设，将高重复人工业务流程重构为可追溯、可量化、闭环可控的 AI 自动化链路。",
+    location: "北京市",
+    age: "29 岁",
+    phone: "13811599512",
+    email: "ll1377634036@163.com"
+  },
+
+  /* SECTION: hero metrics */
+  heroStats: [
+    { value: "5 年+", label: "产品经理经验", sub: "2020.12 — 2026.07" },
+    { value: "8 个", label: "已落地产品", sub: "绿城 5 个 + 奇流 3 个" },
+    { value: "AI × 数据", label: "擅长方向", sub: "agent 产品与数据可视化搭建" },
+    {
+      value: "91%", metric: "知识检索召回率", label: "核心成果", sub: "企业智能知识问答系统 · 由 56% 提升",
+      cycle: [
+        { v: "91%", m: "知识检索召回率", s: "企业智能知识问答系统 · 由 56% 提升" },
+        { v: "5 秒", m: "问答平均响应", s: "企业智能知识问答系统 · 从 12 秒压缩" },
+        { v: "60%", m: "晨会准备效率提升", s: "AI 数据日报 · 全链路自动化" },
+        { v: "95 分", m: "日报用户满意度", s: "AI 数据日报 · 满分 100" },
+        { v: "23.3%", m: "平台订单量增长", s: "旅游 SaaS 平台 · 上线 4 个月" }
+      ]
+    }
+  ],
+
+  /* SECTION: capabilities */
+  capabilities: [
+    {
+      key: "land",
+      index: "01",
+      title: "AI 场景落地与业务赋能",
+      en: "Scenario Delivery",
+      desc:
+        "从 0 到 1 搭建产品闭环，熟练运用 Coze / Dify 构建 Agent 工作流，将复杂人工操作转化为自动执行流程，显著降本增效。",
+      tags: ["Coze", "Dify", "多Agent编排", "workflow"]
+    },
+    {
+      key: "tech",
+      index: "02",
+      title: "技术产品化把控",
+      en: "Tech Productization",
+      desc:
+        "熟悉 RAG、大模型、Prompt 工程等原理，擅长把业务目标拆解为模型评估指标与产品路径，协同算法团队迭代优化，精准管控 AI 幻觉与落地风险。",
+      tags: ["RAG", "Prompt 工程", "质量评测", "幻觉治理"]
+    },
+    {
+      key: "data",
+      index: "03",
+      title: "数据驱动与指标体系构建",
+      en: "Data Driven",
+      desc:
+        "主导多业务线指标体系从 0 到 1 搭建，熟练运用 SQL 完成数据提取与可视化看板建设，以量化数据支撑产品迭代；项目成果可追溯、可验证。",
+      tags: ["SQL", "指标体系", "可视化看板", "数仓建设"]
+    },
+    {
+      key: "collab",
+      index: "04",
+      title: "跨角色多方协同",
+      en: "Cross-team Sync",
+      desc:
+        "精准完成业务需求与 AI 技术能力的双向翻译，清晰传递技术边界与业务诉求，在业务、研发、运营、管理的多方冲突中快速找到平衡点。",
+      tags: ["需求翻译", "边界共识", "主导落地"]
+    }
+  ],
+
+  /* SECTION: product modules (case groups) */
+  groups: [
+    {
+      id: "greentown",
+      company: "绿城中国控股有限公司",
+      role: "产品经理",
+      period: "2023.10 — 2026.07",
+      brief:
+        "优质房产开发与生活综合服务商，坚持「品质为先」，布局三大业务板块，产品力行业领先，多年稳居房企百强综合实力 TOP10。",
+      modules: [
+        {
+          name: "企业智能知识问答系统",
+          role: "主导 0→1 产品设计与落地",
+          scope: "功能需求定义 · 前端会话交互 · AI 架构与 RAG 方案 · Prompt 工程与评测体系",
+          problem:
+            "企业内部非结构化数据（文档 / 档案）检索难、数据孤岛严重、安全管控缺失，需要一颗企业级 AI 知识大脑。",
+          solution: [
+            {
+              t: "需求与知识架构",
+              d: "构建支持文件与标签式 AI 问答的职能知识库，采用「职能—分类—文档—标签」四层逻辑精准匹配；配套「岗位—职能—知识库—角色」分级权限，实现跨职能知识的安全隔离管控。"
+            },
+            {
+              t: "RAG 链路设计",
+              d: "搭建「意图识别 + 查询改写 + 多路召回 + 重排序」完整链路。文档侧做段落拆分、窗口重叠与元数据标注，经 Embedding 向量化后存入 Milvus；查询侧结合上下文对原始 Query 语义扩展重构，多路召回提升检索准确性。交互侧引入多轮对话，并基于上下文预测后续问题供点击，降低认知负荷。"
+            },
+            {
+              t: "Prompt 工程",
+              d: "设计 CoT 结构化 Prompt 框架，明确任务边界、输出格式与兜底规则，确保输出逻辑清晰、格式统一；要求内容附带引用依据，使论据可追溯，提升用户信任感。"
+            },
+            {
+              t: "评测与监控闭环",
+              d: "搭建「效率 + 质量 + 安全」指标体系，配套全链路监控看板，实时展示接口异常率、用户满意度、知识缺失率，可下钻至会话日志逐条排查；自动归档 Bad Case 驱动知识库补充与策略调优，配合分流上线与异常自动回滚，形成「监控→定位→优化→验证」闭环。"
+            }
+          ],
+          results: [
+            { k: "检索召回率", v: "56% → 91%" },
+            { k: "平均响应时间", v: "12 秒 → 5 秒" },
+            { k: "知识库利用率", v: "提升至 46%" },
+            { k: "知识检索时间", v: "平均节省 83.3%" }
+          ]
+        },
+        {
+          name: "AI 数据日报",
+          role: "主导 AI 日报功能落地",
+          scope: "业务场景梳理 · 数据集搭建 · 产品设计与 PRD 落地 · 参与 Agent + RAG + LLM 架构设计",
+          problem:
+            "受限于每日繁琐的人工数据整理，业务侧难以在例会中快速聚焦并拉齐异常数据，拖慢决策节奏。",
+          solution: [
+            {
+              t: "数据基座：指标标准化与 SQL 模板预置",
+              d: "聚焦「供、销、存、回」四大核心业务场景，从 0 到 1 梳理标准化数据指标体系，明确数据口径与业务边界。为打破大模型底层数据查询的幻觉瓶颈，预置标准化 SQL 查询模板，把复杂业务逻辑转化为可被 AI 精准调用的数据工具，规范 Agent 对底层数据表的检索与提取路径，大幅提升查询准确率。"
+            },
+            {
+              t: "智能生成链路：MCP 工具调用与 LLM 内容编排",
+              d: "设计并落地「数据获取—内容生成—自动分发」全链路智能工作流，支持按组织架构与项目维度灵活路由分发；调用 MCP 已注册接口实现跨系统底层数据自动拉取，将结构化数据清单传入 LLM，结合 Prompt 工程对格式、逻辑与专业度精准编排，最终实现高质量业务日报自动化、定时生成与推送。"
+            }
+          ],
+          results: [
+            { k: "晨会准备效率", v: "提升 60%" },
+            { k: "平均用户满意度", v: "95 分" }
+          ]
+        },
+        {
+          name: "棱镜数据驾驶舱",
+          role: "统筹指标体系全周期搭建",
+          scope: "需求梳理 · 方案设计 · 指标落地 · 上线推广 · 迭代优化",
+          problem:
+            "客户分析与经营分析维度浅显，缺乏精细化客群特征分析与去化数据支撑，土地颗粒度粗糙，导致分析研判与实际结果脱节。",
+          solution: [
+            {
+              t: "业务场景梳理",
+              d: "聚焦客研人员核心工作场景——客群趋势分析、项目兑现复盘、土地投资决策，让数据分析价值落到拿地研判与营销策略制定上。"
+            },
+            {
+              t: "客研指标体系构建",
+              d: "围绕「客户、土地、销售」三大场景搭建分类分层指标体系，逐层拆解业务目标形成一级到多级指标结构，联合业务方逐项明确计算逻辑、取值来源、统计口径与分析维度，并同步协同数据仓库开发。"
+            },
+            {
+              t: "可视化架构落地",
+              d: "搭建可视化架构并设定核心指标预警；针对客户与土地分析场景，导入板块边界经纬度、新增板块图层并关联土地属性，实现客户位置与所属板块的精准匹配及可视化呈现。"
+            }
+          ],
+          results: [
+            { k: "用户访问量（4个月内）", v: "提升 50%+" },
+            { k: "用户活跃度（较上线初期）", v: "提升 34.25%" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "chiriu",
+      company: "北京奇流科技有限公司",
+      role: "SaaS 产品经理",
+      period: "2020.12 — 2023.06",
+      brief:
+        "全港资旅游互联网技术企业，专注服务境外旅行目的地上下游商家，业务涵盖技术推广、旅客票务代理、小微型客车租赁、广告设计制作等。",
+      modules: [
+        {
+          name: "旅游企业管理 SaaS 平台",
+          role: "主导商品订单及供应侧设计与落地管控",
+          scope: "商品内关联 · OTA 渠道对接 · 分销策略制定 · 需求拆解与原型设计 · 上线推动与迭代",
+          problem:
+            "服务境外目的地商家的 B2B2C 电商平台以订单抽成为核心商业模式，面临订单量增长缓慢、商品供给单一、自有资源受限，直接制约营收与盈利能力。",
+          solution: [
+            {
+              t: "商品内关联功能",
+              d: "基于 Inner API 搭建商品与订单中台，打通上下游供应链系统，实现 SPU/SKU 属性、价格、库存批量自动化导入；构建「正向预订—逆向退改」订单全生命周期自动化流转闭环，履约凭证与服务资源（如司导）实时双向同步，消除系统间数据孤岛，有效扩充平台长尾商品供给。"
+            },
+            {
+              t: "分销渠道：对接 OTA",
+              d: "主导对接携程、飞猪、Mozio 等头部 OTA 渠道，搭建跨平台异构商品映射（SKU 归一）模型，实现实时报价与差异化履约规则（退改政策 / 服务范围）动态配置，打通订单双向同步链路，实现非标服务产品的标准化 ToC 分发，打破单一流量渠道依赖。"
+            },
+            {
+              t: "分销价格策略",
+              d: "支持代理商分组管理，可按基础售价灵活设置百分比或固定金额调价规则并自动适配下单报价；未分组代理商沿用零售报价，支持商品级颗粒度独立定价，满足多渠道、多场景差异化报价与精细化渠道管控。"
+            }
+          ],
+          results: [
+            { k: "平台整体订单量", v: "增长 23.3%" },
+            { k: "活跃商品种类（SKU）", v: "增加 22%" },
+          ]
+        },
+        {
+          name: "MyLink 电商中台系统",
+          role: "负责电商中台迭代",
+          scope: "商品审核流程 · 商家积分发放 · 电子码核销 · 用户积分消耗链路 · 优惠券营销模块",
+          problem:
+            "平台需拓展入驻商家规模、提升用户线上活跃度，但系统支撑能力与业务增长不匹配，商家自主运营能力不足，用户积分消耗场景缺失、激励闭环未形成。",
+          solution: [
+            {
+              t: "积分管理",
+              d: "设计商家预充值账户全生命周期管理，支持充值、返奖、调账等多场景余额管控，实现积分发放与电子码核销全链路可追溯；用户积分可抵扣线上商品及线下扫码，覆盖冻结 / 解冻 / 扣减全流程，完成积分价值闭环，赋能商家拉新促活。"
+            },
+            {
+              t: "优惠券管理",
+              d: "对接卡券中台实现活动 ID 绑定与数据自动回填，支持满减券、现金券创建，灵活配置使用门槛、多类型有效期与发放规则；APP 端提供领券入口及线上订单抵扣，满足跨境巴士业务营销与核销的全流程管理需求。"
+            }
+          ],
+          results: [
+            { k: "商家自主运营效率", v: "提升 50%" },
+            { k: "用户活跃度", v: "提升 35%" }
+          ]
+        }
+      ]
+    }
+  ],
+
+  /* SECTION: performance bars —— pct 恒等于右侧标注的百分比，条长即数值，不做视觉放大 */
+  performance: [
+    { label: "知识检索召回率", to: "91%", note: "企业智能知识问答系统：意图识别 + 查询改写 + 多路召回 + 重排序的完整 RAG 链路，召回率由 56% 大幅提升至 91%" },
+    { label: "问答平均响应", to: "5 秒", note: "企业智能知识问答系统：平均响应时间从 12 秒压缩至 5 秒，全链路控制 + 高频缓存机制。" },
+    { label: "知识检索时间节省", to: "83.3%", note: "企业智能知识问答系统：非结构化文档检索难、数据孤岛问题被职能知识库替代，检索时间平均节省约 83.3%" },
+    { label: "知识库利用率", to: "46%", note: "企业智能知识问答系统：知识储备与分级权限体系上线后利用率提升至 46%，Bad Case 自动归档持续驱动知识补充与策略调优" },
+    { label: "晨会准备效率提升", to: "60%", note: "AI 数据日报：数据获取、内容生成到分发全链路自动化，日报定时生成推送，支撑业务快速聚焦异常" },
+    { label: "日报用户满意度", to: "95 分", note: "AI 数据日报：Prompt 工程对内容格式、逻辑与专业度精准编排约束，平均用户满意度达 95 分" },
+    { label: "驾驶舱访问量提升", to: "50%+", note: "棱镜数据驾驶舱：通过针对性培训与场景化演示强化用户认知，4 个月内访问量提升 50%+ 并长期稳定" },
+    { label: "驾驶舱用户活跃度", to: "34.25%", note: "棱镜数据驾驶舱：结合用户反馈持续优化迭代，活跃度较上线初期提升 34.25%" },
+    { label: "平台订单量增长", to: "23.3%", note: "旅游企业管理 SaaS 平台：强化分销体系、丰富商品供给，上线 4 个月整体订单量增长 23.3%" },
+    { label: "活跃 SKU 增长", to: "22%", note: "旅游企业管理 SaaS 平台：打通上下游供应链并对接头部 OTA 渠道，活跃商品种类增加 22%，客单价稳步提升" },
+    { label: "商家运营效率提升", to: "50%", note: "MyLink 电商中台：商家预充值积分体系与优惠券营销模块上线，积分发放与核销全链路可追溯，商家自主运营效率提升 50%" },
+    { label: "用户活跃度提升", to: "35%", note: "MyLink 电商中台：积分抵扣线上商品与线下扫码、完成积分价值闭环，用户活跃度提升 35%" }
+  ],
+
+  /* SECTION: timeline */
+  timeline: [
+    {
+      year: "2023.10 — 2026.07",
+      org: "绿城中国控股有限公司",
+      role: "产品经理",
+      items: ["企业智能知识问答系统", "AI 数据日报", "棱镜数据驾驶舱","浙里瞰数据看板","企业审批系统"],
+      desc: "在绿城期间深耕企业内部 AI 与数据类产品，既完成大模型应用产品的方案设计、幻觉风险管控与质量评测体系建设，也主导业务指标体系的分层构建与可视化落地，打通从业务痛点到可量化业务成果的完整产品闭环。"
+    },
+    {
+      year: "2020.12 — 2023.06",
+      org: "北京奇流科技有限公司",
+      role: "SaaS 产品经理",
+      items: ["旅游企业管理 SaaS 平台", "客户管理系统","MyLink 电商中台系统"],
+      desc: "立足积分电商、旅游 B 端 SaaS 业务，完成交易中台、分销渠道、用户营销体系的业务建模与产品落地，构建完整商业化运营底座，通过产品迭代持续赋能商家经营，拉动平台订单与活跃 SKU 增长。"
+    },
+    {
+      year: "2016.09 — 2020.07",
+      org: "大连财经学院",
+      role: "信息管理与信息系统 · 本科",
+      items: ["英语四级证书"],
+      desc: "主修前后端开发、数据库、信息系统管理等课程，夯实计算机技术与业务系统分析的复合知识基础。"
+    }
+  ],
+
+  /* SECTION: stack */
+  stack: [
+    { cat: "智能化产品方案", items: ["RAG 链路设计", "workflow", "多路召回 + 重排序", "意图分层", "CoT 结构化 Prompt", "多 Agent 协作", "AI 幻觉治理", "模型评估指标"] },
+    { cat: "工程协作与工具", items: ["Coze", "Dify", "codex", "claude" , "MCP 工具调用", "SQL 数据提取", "数据仓库协同"] },
+    { cat: "产品方法", items: ["0→1 产品闭环", "PRD 与原型", "指标体系构建", "KANO模型", "埋点监控", "Bad Case 归档", "分流上线与回滚"] },
+    { cat: "垂直业务沉淀", items: ["企业知识管理", "经营数据分析", "客户管理", "OTA 渠道分销", "电商中台", "跨境旅游"] }
+  ],
+
+  certifications: [
+    { name: "人工智能训练师证书", time: "2025 年 3 月" },
+    { name: "大学英语四级（CET-4）", time: "2019 年下半年" }
+  ]
+};
+
+</script>
+<script>
+/* SECTION: boot
+   渲染与交互全部由同目录下的数据脚本（window.RESUME）驱动。*/
+(function () {
+  "use strict";
+  var D = window.RESUME || {};
+  var M = D.meta || {};
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var esc = function (s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  };
+  var el = function (tag, cls, html) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (html != null) n.innerHTML = html;
+    return n;
+  };
+
+  /* SECTION: static text */
+  function paintStatic() {
+    document.title = (M.name || "简历") + " · " + (M.role || "") + " — 个人产品说明书";
+    $("#mono").textContent = M.initial || (M.name || "?").charAt(0);
+    $("#brandName").textContent = M.name || "";
+    $("#heroName").textContent = (M.name || "") + " · " + (M.role || "");
+    $("#heroSlogan").textContent = M.slogan || "";
+    $("#ftName").textContent = M.name || "";
+    $("#ftRole").textContent = M.role || "";
+
+    var meta = $("#heroMeta");
+    [["意向城市", M.location], ["求职意向", M.role], ["年龄", M.age]].forEach(function (p) {
+      if (!p[1]) return;
+      meta.appendChild(el("span", "",
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/></svg>' +
+        esc(p[0]) + " · " + esc(p[1])));
+    });
+  }
+
+  /* SECTION: nav */
+  var SECS = [
+    ["capabilities", "核心能力"],
+    ["modules", "产品案例"],
+    ["performance", "数据成果"],
+    ["timeline", "成长路径"],
+    ["stack", "能力清单"],
+    ["contact", "联系方式"]
+  ];
+  function buildNav() {
+    var nav = $("#nav");
+    SECS.forEach(function (s) {
+      var a = el("a", "", esc(s[1]));
+      a.href = "#" + s[0];
+      a.dataset.sec = s[0];
+      nav.appendChild(a);
+    });
+    $("#navToggle").addEventListener("click", function () {
+      var open = nav.classList.toggle("open");
+      this.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+    nav.addEventListener("click", function (e) {
+      if (e.target.tagName === "A") {
+        nav.classList.remove("open");
+        $("#navToggle").setAttribute("aria-expanded", "false");
+      }
+    });
+  }
+  function spy() {
+    var y = window.scrollY + 130, cur = "";
+    SECS.forEach(function (s) {
+      var n = document.getElementById(s[0]);
+      if (n && n.offsetTop <= y) cur = s[0];
+    });
+    $$("#nav a").forEach(function (a) {
+      a.classList.toggle("active", a.dataset.sec === cur);
+    });
+    $("#topbar").classList.toggle("stuck", window.scrollY > 8);
+    replayHeroOnTop();
+  }
+  /* 从下方滚回顶部时，重播首屏淡入动效 */
+  var wasBelow = false, heroReplaying = false;
+  function replayHeroOnTop() {
+    var y = window.scrollY;
+    if (y > 480) { wasBelow = true; return; }
+    if (!wasBelow || y > 60 || heroReplaying) return;
+    wasBelow = false;
+    heroReplaying = true;
+    var nodes = $$(".hero .rv");
+    nodes.forEach(function (n) { n.classList.remove("on"); });
+    void document.body.offsetHeight;
+    nodes.forEach(function (n, i) {
+      setTimeout(function () { n.classList.add("on"); }, 90 * i);
+    });
+    setTimeout(function () { heroReplaying = false; }, 90 * nodes.length + 800);
+  }
+
+  /* SECTION: hero stats */
+  function buildStats() {
+    var row = $("#statsRow");
+    (D.heroStats || []).forEach(function (s) {
+      var node = el("div", "stat",
+        '<div class="stat-v' + (s.cycle ? " cyc" : "") + '">' + esc(s.value) +
+        (s.metric ? '<span class="stat-metric">' + esc(s.metric) + '</span>' : "") + '</div>' +
+        '<div class="stat-l">' + esc(s.label) + '</div>' +
+        '<div class="stat-s' + (s.cycle ? " cyc" : "") + '">' + esc(s.sub) + '</div>');
+      if (s.cycle && s.cycle.length > 1) startCycle(node, s.cycle);
+      row.appendChild(node);
+    });
+  }
+  /* 核心成果轮播：数值 + 指标名 + 来源每 2.8 秒切换一条量化数据 */
+  function startCycle(node, items) {
+    var vEl = $(".stat-v", node), sEl = $(".stat-s", node), i = 0;
+    function paint() {
+      var it = items[i];
+      vEl.innerHTML = esc(it.v) + (it.m ? '<span class="stat-metric">' + esc(it.m) + '</span>' : "");
+      if (sEl && it.s != null) sEl.textContent = it.s;
+    }
+    setInterval(function () {
+      if (document.hidden) return;
+      i = (i + 1) % items.length;
+      [vEl, sEl].forEach(function (n) { if (n) n.classList.add("fade"); });
+      setTimeout(function () {
+        paint();
+        [vEl, sEl].forEach(function (n) { if (n) n.classList.remove("fade"); });
+      }, 260);
+    }, 2800);
+  }
+
+  /* SECTION: capabilities */
+  function buildCaps() {
+    var g = $("#capsGrid");
+    (D.capabilities || []).forEach(function (c) {
+      g.appendChild(el("article", "cap",
+        '<div class="cap-idx">' + esc(c.index) + ' / CAPABILITY</div>' +
+        '<h3>' + esc(c.title) + '</h3>' +
+        '<div class="cap-en">' + esc(c.en) + '</div>' +
+        '<p>' + esc(c.desc) + '</p>' +
+        '<div class="cap-tags">' + (c.tags || []).map(function (t) {
+          return '<span class="tg">' + esc(t) + '</span>';
+        }).join("") + '</div>'));
+    });
+  }
+
+  /* SECTION: modules carousel */
+  var curGroup = 0;
+  function buildTabs() {
+    var tabs = $("#grpTabs");
+    (D.groups || []).forEach(function (g, i) {
+      var b = el("button", "tab",
+        '<span>' + esc(g.company) + '（' + g.modules.length + '）</span>' +
+        '<span class="tab-sub">' + esc(g.role) + ' · ' + esc(g.period) + '</span>');
+      b.type = "button";
+      b.dataset.primaryAction = "switch-company";
+      b.setAttribute("role", "tab");
+      b.setAttribute("aria-selected", i === curGroup ? "true" : "false");
+      b.addEventListener("click", function () {
+        curGroup = i;
+        $$(".tab", tabs).forEach(function (o, j) {
+          o.setAttribute("aria-selected", j === i ? "true" : "false");
+        });
+        renderGroup();
+      });
+      tabs.appendChild(b);
+    });
+  }
+  var carIdx = 0, carN = 0, carTrack = null;
+  function carGoto(i, smooth) {
+    if (!carTrack || !carN) return;
+    i = Math.max(0, Math.min(carN - 1, i));
+    var card = carTrack.children[i];
+    if (!card) return;
+    var left = card.offsetLeft - carTrack.offsetLeft;
+    if (smooth === false) {
+      carTrack.scrollLeft = left;
+    } else {
+      try { carTrack.scrollTo({ left: left, behavior: "smooth" }); }
+      catch (e) { carTrack.scrollLeft = left; }
+    }
+  }
+  function carSync() {
+    if (!carTrack || !carN) return;
+    var x = carTrack.scrollLeft, best = 0, bd = Infinity;
+    for (var i = 0; i < carN; i++) {
+      var d = Math.abs((carTrack.children[i].offsetLeft - carTrack.offsetLeft) - x);
+      if (d < bd) { bd = d; best = i; }
+    }
+    carIdx = best;
+    $$("#carDots .car-dot").forEach(function (dt, j) { dt.classList.toggle("on", j === best); });
+    $("#carCount").textContent = (best + 1) + " / " + carN;
+    $("#carPrev").disabled = best === 0;
+    $("#carNext").disabled = best >= carN - 1;
+  }
+  function buildCarouselUI() {
+    carTrack = $("#modsList");
+    var dots = $("#carDots");
+    dots.innerHTML = "";
+    for (var i = 0; i < carN; i++) {
+      (function (k) {
+        var d = el("button", "car-dot" + (k === 0 ? " on" : ""));
+        d.type = "button";
+        d.setAttribute("aria-label", "查看第 " + (k + 1) + " 个项目");
+        d.addEventListener("click", function () { carGoto(k); });
+        dots.appendChild(d);
+      })(i);
+    }
+    $("#carPrev").onclick = function () { carGoto(carIdx - 1); };
+    $("#carNext").onclick = function () { carGoto(carIdx + 1); };
+    carTrack.onkeydown = function (e) {
+      if (e.key === "ArrowLeft") { e.preventDefault(); carGoto(carIdx - 1); }
+      if (e.key === "ArrowRight") { e.preventDefault(); carGoto(carIdx + 1); }
+    };
+    var raf = 0;
+    carTrack.addEventListener("scroll", function () {
+      if (raf) return;
+      raf = requestAnimationFrame(function () { raf = 0; carSync(); });
+    }, { passive: true });
+    carIdx = 0;
+    carSync();
+  }
+  function renderGroup() {
+    var g = (D.groups || [])[curGroup];
+    if (!g) return;
+    var list = $("#modsList");
+    list.innerHTML = "";
+    g.modules.forEach(function (m, i) {
+      var card = el("article", "mod");
+      card.setAttribute("aria-roledescription", "项目卡片 " + (i + 1) + " / " + g.modules.length);
+      var sol = (m.solution || []).map(function (s, k) {
+        return '<div class="sol-i"><span class="num">' + (k + 1) + '</span><div><b>' +
+          esc(s.t) + '</b><span>' + esc(s.d) + '</span></div></div>';
+      }).join("");
+      var res = (m.results || []).map(function (r) {
+        return '<div class="res-i"><b>' + esc(r.v) + '</b><span>' + esc(r.k) + '</span></div>';
+      }).join("");
+      card.innerHTML =
+        '<div class="mod-top">' +
+          '<span class="mod-no">M' + (i + 1) + '</span>' +
+          '<span><span class="mod-t">' + esc(m.name) + '</span>' +
+          '<span class="mod-role">' + esc(m.role) + '</span></span>' +
+        '</div>' +
+        '<div class="mod-body">' +
+          '<div class="mod-col mod-col-a">' +
+            '<div class="blk"><div class="blk-h">Problem</div><p>' + esc(m.problem) + '</p></div>' +
+            '<div class="blk"><div class="blk-h">Result</div><div class="res">' + res + '</div></div>' +
+          '</div>' +
+          '<div class="mod-col mod-col-b">' +
+            '<div class="blk"><div class="blk-h">Solution</div><div class="sol">' + sol + '</div></div>' +
+          '</div>' +
+        '</div>';
+      list.appendChild(card);
+    });
+    carN = g.modules.length;
+    buildCarouselUI();
+  }
+
+  /* SECTION: performance */
+  function buildPerf() {
+    var wrap = $("#perfList");
+    (D.performance || []).forEach(function (p) {
+      var num = parseFloat(p.to);
+      var isNum = !isNaN(num);
+      wrap.appendChild(el("div", "pf",
+        '<div class="pf-v"' + (isNum ? ' data-count="' + num + '"' : "") + '>' + esc(p.to) + '</div>' +
+        '<div class="pf-l">' + esc(p.label) + '</div>' +
+        '<div class="pf-note">' + esc(p.note) + '</div>'));
+    });
+  }
+  /* 数字翻牌：进入视口后从 0 缓动到目标值，保留原小数位与单位 */
+  function countUp(node) {
+    var target = parseFloat(node.dataset.count);
+    if (isNaN(target)) return;
+    var text = node.textContent;
+    var dec = ((text.match(/\.(\d+)/) || [])[1] || "").length;
+    var suffix = text.replace(String(target), "");
+    var neg = text.trim().charAt(0) === "-";
+    var t0 = null, dur = 1100;
+    function step(ts) {
+      if (!t0) t0 = ts;
+      var k = Math.min(1, (ts - t0) / dur);
+      var eased = 1 - Math.pow(1 - k, 3);
+      node.textContent = (neg ? "-" : "") + (target * eased).toFixed(dec) + suffix;
+      if (k < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  /* SECTION: timeline & certifications */
+  function buildTimeline() {
+    var tl = $("#tlList");
+    (D.timeline || []).forEach(function (t) {
+      tl.appendChild(el("div", "tl-i",
+        '<div class="tl-y">' + esc(t.year) + '</div>' +
+        '<div class="tl-o">' + esc(t.org) + '</div>' +
+        '<div class="tl-r">' + esc(t.role) + '</div>' +
+        '<p class="tl-d">' + esc(t.desc) + '</p>' +
+        '<div class="tl-tags">' + (t.items || []).map(function (i) {
+          return '<span class="tg">' + esc(i) + '</span>';
+        }).join("") + '</div>'));
+    });
+    var cc = $("#certList");
+    (D.certifications || []).forEach(function (c) {
+      cc.appendChild(el("div", "cert-i",
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 14.6 9l6 .9-4.3 4.3 1 6-5.3-2.9L6.7 20.2l1-6L3.4 9.9l6-.9Z"/></svg>' +
+        '<b>' + esc(c.name) + '</b><span>' + esc(c.time) + '</span>'));
+    });
+  }
+
+  /* SECTION: stack */
+  function buildStack() {
+    var g = $("#stkGrid");
+    (D.stack || []).forEach(function (c) {
+      g.appendChild(el("div", "stk-cat",
+        '<h3>' + esc(c.cat) + '</h3><div class="stk-items">' +
+        c.items.map(function (i) { return '<span class="stk-t">' + esc(i) + '</span>'; }).join("") +
+        '</div>'));
+    });
+  }
+
+  /* SECTION: contact & copy */
+  var toastTimer;
+  function toast(msg) {
+    var t = $("#toast");
+    $("#toastMsg").textContent = msg;
+    t.classList.add("on");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.classList.remove("on"); }, 1900);
+  }
+  function copyText(txt) {
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(txt);
+    }
+    return new Promise(function (resolve, reject) {
+      var ta = document.createElement("textarea");
+      ta.value = txt;
+      ta.setAttribute("readonly", "");
+      ta.style.cssText = "position:fixed;left:-9999px;top:0";
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+      document.body.removeChild(ta);
+      ok ? resolve() : reject(new Error("copy failed"));
+    });
+  }
+  function buildContact() {
+    var list = $("#copyList");
+    [["电话", M.phone, "phone"], ["邮箱", M.email, "mail"], ["常驻", M.location, "pin"]].forEach(function (p) {
+      if (!p[1]) return;
+      var ico = {
+        phone: '<path d="M6.5 3.5h3l1.5 4-2 1.5a11 11 0 0 0 6 6l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.5 5.7 2 2 0 0 1 6.5 3.5Z"/>',
+        mail: '<rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="m4 7 8 6 8-6"/>',
+        pin: '<path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/>'
+      }[p[2]];
+      var b = el("button", "copy",
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' + ico + '</svg>' +
+        '<span><span class="copy-k">' + esc(p[0]) + '</span><span class="copy-v">' + esc(p[1]) + '</span></span>' +
+        '<span class="copy-hint">点击复制</span>');
+      b.type = "button";
+      b.dataset.primaryAction = "copy-contact";
+      if (p[2] === "pin") { b.disabled = true; b.style.opacity = ".62"; $(".copy-hint", b).textContent = "意向城市"; }
+      b.addEventListener("click", function () {
+        copyText(p[1]).then(function () {
+          b.classList.add("done");
+          $(".copy-hint", b).textContent = "已复制";
+          toast(p[0] + "已复制：" + p[1]);
+          setTimeout(function () {
+            b.classList.remove("done");
+            $(".copy-hint", b).textContent = "点击复制";
+          }, 2200);
+        }).catch(function () {
+          toast("复制失败，请手动选择：" + p[1]);
+        });
+      });
+      list.appendChild(b);
+    });
+  }
+
+  /* SECTION: theme */
+  var KEY = "ll-r…heme";
+  function applyTheme(t) {
+    document.documentElement.setAttribute("data-theme", t);
+    $("#ftTheme").textContent = t === "dark" ? "深色主题" : "浅色主题";
+  }
+  function initTheme() {
+    var saved = null;
+    try { saved = localStorage.getItem(KEY); } catch (e) { saved = null; }
+    var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    applyTheme(saved || (prefersDark ? "dark" : "light"));
+    $("#themeBtn").addEventListener("click", function () {
+      var next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      applyTheme(next);
+      try { localStorage.setItem(KEY, next); } catch (e) { /* 隐私模式下忽略 */ }
+    });
+  }
+
+  /* SECTION: reveal & count-up driver */
+  function initReveal() {
+    var nodes = $$(".rv");
+    if (!("IntersectionObserver" in window)) {
+      nodes.forEach(function (n) { n.classList.add("on"); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        en.target.classList.add("on");
+        io.unobserve(en.target);
+        $$(".pf-v[data-count]", en.target).forEach(function (n, i) {
+          setTimeout(function () { countUp(n); }, 70 * i);
+        });
+      });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.12 });
+    nodes.forEach(function (n) { io.observe(n); });
+  }
+
+  /* SECTION: init */
+  function init() {
+    paintStatic();
+    buildNav();
+    buildStats();
+    buildCaps();
+    buildTabs();
+    renderGroup();
+    buildPerf();
+    buildTimeline();
+    buildStack();
+    buildContact();
+    initTheme();
+    initReveal();
+    spy();
+    window.addEventListener("scroll", spy, { passive: true });
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else { init(); }
+})();
+
+</script>
+</body>
+</html>
